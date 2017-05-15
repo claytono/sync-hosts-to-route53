@@ -65,3 +65,16 @@ func readHosts(filename string) (hosts []hostEntry) {
 
 	return
 }
+
+func filterHosts(hosts []hostEntry, networks []CIDRNet) []hostEntry {
+	output := []hostEntry{}
+	for _, host := range hosts {
+		for _, net := range networks {
+			if net.Contains(host.ip) {
+				output = append(output, host)
+				break
+			}
+		}
+	}
+	return output
+}
