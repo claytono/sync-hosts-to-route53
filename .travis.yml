@@ -1,8 +1,11 @@
 ---
 language: go
 
-
 sudo: false
+
+env:
+  - STAGE=test
+  - STAGE=build
 
 install:
   - wget "https://github.com/Masterminds/glide/releases/download/v0.12.3/glide-v0.12.3-linux-amd64.tar.gz"
@@ -12,4 +15,4 @@ install:
   - glide install
 
 script:
-  - go test $(glide novendor)
+  - make ${STAGE}
