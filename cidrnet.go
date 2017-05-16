@@ -9,6 +9,7 @@ type CIDRNet struct {
 	net.IPNet
 }
 
+// Allows go-flags package to parse CIDR blocks directly
 func (n *CIDRNet) UnmarshalFlag(value string) error {
 	_, ipnet, err := net.ParseCIDR(value)
 	if err != nil {
@@ -19,14 +20,7 @@ func (n *CIDRNet) UnmarshalFlag(value string) error {
 	return nil
 }
 
+// Allows go-flags package to print CIDR blocks directly.
 func (n CIDRNet) MarshalFlag() (string, error) {
 	return n.IPNet.String(), nil
-}
-
-func CIDRNetstoIPNets(networks []CIDRNet) []net.IPNet {
-	var output []net.IPNet
-	for _, n := range networks {
-		output = append(output, n.IPNet)
-	}
-	return output
 }
