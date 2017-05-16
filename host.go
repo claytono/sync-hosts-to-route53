@@ -9,12 +9,6 @@ import (
 	"strings"
 )
 
-type hostEntry struct {
-	hostname string
-	ip       net.IP
-	aliases  []string
-}
-
 func parseLine(line string) (*hostEntry, error) {
 	if i := strings.Index(line, "#"); i >= 0 {
 		line = line[0:i]
