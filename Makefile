@@ -1,4 +1,4 @@
-all: build test
+all: build test lint
 
 build: sync-hosts-to-route53
 
@@ -8,7 +8,10 @@ sync-hosts-to-route53:
 test:
 	go test -v $(glide novendor)
 
+lint:
+	golint
+
 clean:
 	go clean
 
-.PHONY: all clean test build
+.PHONY: all clean test build lint
