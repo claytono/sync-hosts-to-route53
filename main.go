@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"os"
 
@@ -11,7 +12,8 @@ import (
 type hostEntry struct {
 	hostname string
 	ip       net.IP
-	aliases  []string
+	// Aliases are read from the /etc/hosts file, but not mapped to Route53
+	aliases []string
 }
 
 var opts struct {
@@ -32,9 +34,20 @@ func parseOpts() {
 	}
 }
 
+func compareHosts(hosts []hostEntry, r53hosts []hostEntry) {
+
+}
+
 func main() {
 	parseOpts()
 	hosts := readHosts(opts.File)
 	hosts = filterHosts(hosts, opts.Networks)
-	fmt.Println(hosts)
+
+	r53 := newRoute53()
+	r53_hosts, err := r53.getRoute53Hosts(opts.Domain)
+	if err != nil {
+		log.Fatal(fmt.Errorf("error when retrieving zones: %v", err))
+	}
+
+	compareHosts(hosts, r53_hosts)
 }
