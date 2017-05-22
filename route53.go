@@ -10,13 +10,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/route53"
 )
 
-type Route53Client struct {
+type route53Client struct {
 	sess *session.Session
 	svc  *route53.Route53
 }
 
-func newRoute53() Route53Client {
-	var r53 Route53Client
+func newRoute53() route53Client {
+	var r53 route53Client
 
 	// awsSession is global so that we only read the config once and reuse it
 	r53.sess = session.Must(session.NewSessionWithOptions(session.Options{
@@ -28,7 +28,7 @@ func newRoute53() Route53Client {
 	return r53
 }
 
-func (r53 Route53Client) getZone(domain string) (*route53.HostedZone, error) {
+func (r53 route53Client) getZone(domain string) (*route53.HostedZone, error) {
 	params := &route53.ListHostedZonesByNameInput{
 		DNSName: aws.String(domain),
 	}
@@ -44,7 +44,7 @@ func (r53 Route53Client) getZone(domain string) (*route53.HostedZone, error) {
 	return resp.HostedZones[0], nil
 }
 
-func (r53 Route53Client) getRecords(zid string) ([]*route53.ResourceRecordSet, error) {
+func (r53 route53Client) getRecords(zid string) ([]*route53.ResourceRecordSet, error) {
 	params := &route53.ListResourceRecordSetsInput{
 		HostedZoneId: &zid,
 	}
