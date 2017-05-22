@@ -44,10 +44,9 @@ func main() {
 	hosts = filterHosts(hosts, opts.Networks)
 
 	r53 := newRoute53()
-	r53_hosts, err := r53.getRoute53Hosts(opts.Domain)
+	r53Hosts, err := r53.getHosts(opts.Domain)
 	if err != nil {
 		log.Fatal(fmt.Errorf("error when retrieving zones: %v", err))
 	}
-
-	compareHosts(hosts, r53_hosts)
+	r53Hosts = filterHosts(r53Hosts, opts.Networks)
 }
