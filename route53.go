@@ -56,6 +56,20 @@ func (r53 route53Client) getRecords(zid string) ([]*route53.ResourceRecordSet, e
 	return resp.ResourceRecordSets, nil
 }
 
+func (r53 route53Client) getHosts(domain string) ([]hostEntry, error) {
+	zone, err := r53.getZone(domain)
+	if err != nil {
+		return []hostEntry{}, err
+	}
+
+	rawHosts, err := r53.getRecords(*zone.Id)
+	if err != nil {
+		return []hostEntry{}, err
+	}
+
+	return convertR53RecordsToHosts(rawHosts), nil
+}
+
 func convertR53RecordsToHosts(rawHosts []*route53.ResourceRecordSet) []hostEntry {
 	hosts := []hostEntry{}
 	for _, rh := range rawHosts {
@@ -79,18 +93,4 @@ func convertR53RecordsToHosts(rawHosts []*route53.ResourceRecordSet) []hostEntry
 	}
 
 	return hosts
-}
-
-func (r53 Route53Client) getRoute53Hosts(domain string) ([]hostEntry, error) {
-	zone, err := r53.getZone(domain)
-	if err != nil {
-		return []hostEntry{}, err
-	}
-
-	rawHosts, err := r53.getRecords(*zone.Id)
-	if err != nil {
-		return []hostEntry{}, err
-	}
-
-	return convertR53RecordsToHosts(rawHosts), nil
 }
