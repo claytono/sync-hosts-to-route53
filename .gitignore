@@ -1,2 +1,3 @@
 vendor/
 sync-hosts-to-route53
+coverage.out
