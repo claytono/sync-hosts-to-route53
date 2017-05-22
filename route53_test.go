@@ -51,6 +51,6 @@ func TestConvertR53RecordsToHosts(t *testing.T) {
 	}
 
 	output := convertR53RecordsToHosts(input)
-	assert.Equal(t, output, expected)
+	assert.Equal(t, expected, output)
 
 }
