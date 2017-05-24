@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"os"
 
 	flags "github.com/jessevdk/go-flags"
+	"github.com/pkg/errors"
 )
 
 type hostEntry struct {
@@ -75,7 +75,7 @@ func main() {
 	r53 := newRoute53()
 	r53Hosts, err := r53.getHosts(opts.Domain)
 	if err != nil {
-		log.Fatal(fmt.Errorf("error when retrieving zones: %v", err))
+		log.Fatalln(errors.Wrap(err, "error when retrieving zones: %v"))
 	}
 	r53Hosts = filterHosts(r53Hosts, opts.Networks)
 }

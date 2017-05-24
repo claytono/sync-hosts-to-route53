@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/route53"
+	"github.com/pkg/errors"
 )
 
 type route53Client struct {
@@ -34,7 +35,7 @@ func (r53 route53Client) getZone(domain string) (*route53.HostedZone, error) {
 	}
 	resp, err := r53.svc.ListHostedZonesByName(params)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "Cannot list zones")
 	}
 
 	if len(resp.HostedZones) == 0 {
@@ -50,7 +51,7 @@ func (r53 route53Client) getRecords(zid string) ([]*route53.ResourceRecordSet, e
 	}
 	resp, err := r53.svc.ListResourceRecordSets(params)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "Cannot get records")
 	}
 
 	return resp.ResourceRecordSets, nil
@@ -59,12 +60,12 @@ func (r53 route53Client) getRecords(zid string) ([]*route53.ResourceRecordSet, e
 func (r53 route53Client) getHosts(domain string) ([]hostEntry, error) {
 	zone, err := r53.getZone(domain)
 	if err != nil {
-		return []hostEntry{}, err
+		return []hostEntry{}, errors.Wrap(err, "Cannot get zone")
 	}
 
 	rawHosts, err := r53.getRecords(*zone.Id)
 	if err != nil {
-		return []hostEntry{}, err
+		return []hostEntry{}, errors.Wrap(err, "Cannot get hosts")
 	}
 
 	return convertR53RecordsToHosts(rawHosts), nil

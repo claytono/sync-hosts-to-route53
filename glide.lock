@@ -1,8 +1,8 @@
-hash: cb6c5349a39182821930ac4e43f02194fe1ee8104f2cadbd5a705169be99a200
-updated: 2017-05-17T21:59:50.975824229-04:00
+hash: 30f7c81071c3a4582aee6019e538f50d6af4d7ed776b673cf526f4c99b198cb0
+updated: 2017-05-24T10:57:18.812488306-04:00
 imports:
 - name: github.com/aws/aws-sdk-go
-  version: 3cf3ede801c0c4b8b0f6f65b7be60a61a55ef91c
+  version: 73b6153078ca6e3fac11a9b86c819e0f82c42aa2
   subpackages:
   - aws
   - aws/awserr
@@ -29,18 +29,20 @@ imports:
   - service/route53
   - service/sts
 - name: github.com/go-ini/ini
-  version: e7fea39b01aea8d5671f6858f0532f56e8bff3a5
+  version: afbc45e87f3ba324c532d12c71918ef52e0fb194
 - name: github.com/jessevdk/go-flags
   version: 48cf8722c3375517aba351d1f7577c40663a4407
 - name: github.com/jmespath/go-jmespath
   version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
+- name: github.com/pkg/errors
+  version: 645ef00459ed84a119197bfb8d8205042c6df63d
 testImports:
 - name: github.com/davecgh/go-spew
-  version: 346938d642f2ec3594ed81d874461961cd0faa76
+  version: 04cdfd42973bb9c8589fd6a731800cf222fde1a9
   subpackages:
   - spew
 - name: github.com/pmezard/go-difflib
-  version: 792786c7400a136282c1664665ae0a8db921c6c2
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
