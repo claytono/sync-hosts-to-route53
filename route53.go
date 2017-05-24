@@ -75,6 +75,61 @@ func (r53 route53Client) getHosts(domain string) (hostList, error) {
 	return convertR53RecordsToHosts(rawHosts), nil
 }
 
+func (r53 route53Client) sync(domain string, ttl int64, toUpdate []hostEntry, toDelete []hostEntry) error {
+	zone, err := r53.getZone(domain)
+	if err != nil {
+		return errors.Wrap(err, "Cannot get zone")
+	}
+
+	changes := make([]*route53.Change, 0, len(toUpdate)+len(toDelete))
+	for _, h := range toUpdate {
+		change := route53.Change{
+			Action: aws.String("UPSERT"),
+			ResourceRecordSet: &route53.ResourceRecordSet{
+				Name: aws.String(h.hostname),
+				Type: aws.String("A"),
+				TTL:  aws.Int64(ttl),
+				ResourceRecords: []*route53.ResourceRecord{
+					{Value: aws.String(h.ip.String())},
+				},
+			},
+		}
+		changes = append(changes, &change)
+	}
+
+	for _, h := range toDelete {
+		change := route53.Change{
+			Action: aws.String("DELETE"),
+			ResourceRecordSet: &route53.ResourceRecordSet{
+				Name: &h.hostname,
+				Type: aws.String("A"),
+				TTL:  &ttl,
+				ResourceRecords: []*route53.ResourceRecord{
+					{Value: aws.String(h.ip.String())},
+				},
+			},
+		}
+		changes = append(changes, &change)
+	}
+
+	input := route53.ChangeResourceRecordSetsInput{
+		HostedZoneId: zone.Id,
+		ChangeBatch: &route53.ChangeBatch{
+			Changes: changes,
+		},
+	}
+
+	fmt.Printf("Adding/updating %v records, deleting %v out of date records\n",
+		len(toUpdate), len(toDelete))
+
+	_, err = r53.svc.ChangeResourceRecordSets(&input)
+	if err != nil {
+		return errors.Wrapf(err, "Could not update Route 53 records")
+	}
+
+	return nil
+}
+
 func convertR53RecordsToHosts(rawHosts []*route53.ResourceRecordSet) hostList {
 	hosts := hostList{}
 	for _, rh := range rawHosts {
