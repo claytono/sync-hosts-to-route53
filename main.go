@@ -56,6 +56,8 @@ func compareHosts(hosts []hostEntry, r53hosts []hostEntry) ([]hostEntry, []hostE
 			if !h.ip.Equal(rh.ip) {
 				toUpdate = append(toUpdate, h)
 			}
+		} else {
+			toUpdate = append(toUpdate, h)
 		}
 	}
 

@@ -36,6 +36,16 @@ var cases = []struct {
 		},
 		[]hostEntry{},
 	},
+	{"add-new",
+		[]hostEntry{
+			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
+		},
+		[]hostEntry{},
+		[]hostEntry{
+			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
+		},
+		[]hostEntry{},
+	},
 	{"remove-stale",
 		[]hostEntry{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
