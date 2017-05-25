@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strings"
 
 	flags "github.com/jessevdk/go-flags"
 	"github.com/pkg/errors"
@@ -31,6 +32,11 @@ func parseOpts() {
 		} else {
 			os.Exit(1)
 		}
+	}
+
+	// Accept trailing dot, but ignore it for consistency sake
+	if strings.HasSuffix(opts.Domain, ".") {
+		opts.Domain = opts.Domain[:len(opts.Domain)-1]
 	}
 }
 
