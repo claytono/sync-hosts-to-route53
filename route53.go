@@ -42,6 +42,10 @@ func (r53 route53Client) getZone(domain string) (*route53.HostedZone, error) {
 		return nil, fmt.Errorf("could not find domain '%v'", domain)
 	}
 
+	if *resp.HostedZones[0].Name != (domain + ".") {
+		return nil, fmt.Errorf("could not find domain '%v'", domain)
+	}
+
 	return resp.HostedZones[0], nil
 }
 
