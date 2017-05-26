@@ -9,53 +9,53 @@ import (
 
 var cases = []struct {
 	name     string
-	hosts    []hostEntry
-	r53hosts []hostEntry
-	toUpdate []hostEntry
-	toDelete []hostEntry
+	hosts    hostList
+	r53hosts hostList
+	toUpdate hostList
+	toDelete hostList
 }{
 	{"noop",
-		[]hostEntry{
+		hostList{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
 		},
-		[]hostEntry{
+		hostList{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
 		},
-		[]hostEntry{},
-		[]hostEntry{},
+		hostList{},
+		hostList{},
 	},
 	{"need-update",
-		[]hostEntry{
+		hostList{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
 		},
-		[]hostEntry{
+		hostList{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.5")},
 		},
-		[]hostEntry{
+		hostList{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
 		},
-		[]hostEntry{},
+		hostList{},
 	},
 	{"add-new",
-		[]hostEntry{
+		hostList{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
 		},
-		[]hostEntry{},
-		[]hostEntry{
+		hostList{},
+		hostList{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
 		},
-		[]hostEntry{},
+		hostList{},
 	},
 	{"remove-stale",
-		[]hostEntry{
+		hostList{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
 		},
-		[]hostEntry{
+		hostList{
 			{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
 			{hostname: "test2.test.com", ip: net.ParseIP("1.2.3.5")},
 		},
-		[]hostEntry{},
-		[]hostEntry{
+		hostList{},
+		hostList{
 			{hostname: "test2.test.com", ip: net.ParseIP("1.2.3.5")},
 		},
 	},

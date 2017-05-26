@@ -61,22 +61,22 @@ func (r53 route53Client) getRecords(zid string) ([]*route53.ResourceRecordSet, e
 	return resp.ResourceRecordSets, nil
 }
 
-func (r53 route53Client) getHosts(domain string) ([]hostEntry, error) {
+func (r53 route53Client) getHosts(domain string) (hostList, error) {
 	zone, err := r53.getZone(domain)
 	if err != nil {
-		return []hostEntry{}, errors.Wrap(err, "Cannot get zone")
+		return hostList{}, errors.Wrap(err, "Cannot get zone")
 	}
 
 	rawHosts, err := r53.getRecords(*zone.Id)
 	if err != nil {
-		return []hostEntry{}, errors.Wrap(err, "Cannot get hosts")
+		return hostList{}, errors.Wrap(err, "Cannot get hosts")
 	}
 
 	return convertR53RecordsToHosts(rawHosts), nil
 }
 
-func convertR53RecordsToHosts(rawHosts []*route53.ResourceRecordSet) []hostEntry {
-	hosts := []hostEntry{}
+func convertR53RecordsToHosts(rawHosts []*route53.ResourceRecordSet) hostList {
+	hosts := hostList{}
 	for _, rh := range rawHosts {
 		if *rh.Type != "A" {
 			continue

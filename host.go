@@ -2,12 +2,37 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"log"
 	"net"
 	"os"
 	"strings"
 )
+
+type hostEntry struct {
+	hostname string
+	ip       net.IP
+	// Aliases are read from the /etc/hosts file, but not mapped to Route53
+	aliases []string
+}
+
+type hostList []hostEntry
+
+func (h hostList) Len() int {
+	return len(h)
+}
+
+func (h hostList) Less(i, j int) bool {
+	if h[i].hostname != h[j].hostname {
+		return h[i].hostname < h[j].hostname
+	}
+	return bytes.Compare(h[i].ip, h[j].ip) < 0
+}
+
+func (h hostList) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
+}
 
 func parseLine(line string) (*hostEntry, error) {
 	if i := strings.Index(line, "#"); i >= 0 {
@@ -30,7 +55,7 @@ func parseLine(line string) (*hostEntry, error) {
 	return nil, fmt.Errorf("%s is not a valid IP", parts[0])
 }
 
-func readHosts(filename string) (hosts []hostEntry) {
+func readHosts(filename string) (hosts hostList) {
 	file, err := os.Open(filename)
 
 	if err != nil {
@@ -60,8 +85,8 @@ func readHosts(filename string) (hosts []hostEntry) {
 	return
 }
 
-func filterHosts(hosts []hostEntry, networks []CIDRNet) []hostEntry {
-	output := []hostEntry{}
+func filterHosts(hosts hostList, networks []CIDRNet) hostList {
+	output := hostList{}
 	for _, host := range hosts {
 		for _, net := range networks {
 			if net.Contains(host.ip) {

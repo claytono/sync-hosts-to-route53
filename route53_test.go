@@ -46,7 +46,7 @@ func TestConvertR53RecordsToHosts(t *testing.T) {
 		},
 	}
 
-	expected := []hostEntry{
+	expected := hostList{
 		{hostname: "test1.test.com", ip: net.ParseIP("1.2.3.4")},
 	}
 
