@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"sort"
 	"strings"
 
 	flags "github.com/jessevdk/go-flags"
@@ -78,10 +79,34 @@ func compareHosts(hosts hostList, r53hosts hostList) (hostList, hostList) {
 	return toUpdate, toDelete
 }
 
+func removeDupes(hosts hostList) hostList {
+	found := make(map[string]bool, len(hosts))
+
+	// Sort hostlist to ensure stable duplication suppression.  We don't want
+	// to ping pont between choosing different options because of parse order.
+	sort.Sort(hosts)
+
+	dupCount := 0
+	result := make(hostList, 0, len(hosts))
+	for _, h := range hosts {
+		if _, ok := found[h.hostname]; ok {
+			log.Printf("Duplicate hostname found in /etc/hosts, ignoring (%v/%v)",
+				h.hostname, h.ip.String())
+			dupCount++
+		} else {
+			found[h.hostname] = true
+			result = append(result, h)
+		}
+	}
+
+	return result
+}
+
 func main() {
 	parseOpts()
 	hosts := readHosts(opts.File)
 	hosts = filterHosts(hosts, opts.Networks)
+	hosts = removeDupes(hosts)
 
 	r53 := newRoute53()
 	r53Hosts, err := r53.getHosts(opts.Domain)
