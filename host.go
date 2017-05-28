@@ -74,6 +74,7 @@ func readHosts(filename string) (hosts hostList) {
 			continue
 		}
 		if host != nil {
+			host.hostname = canonifyHostname(host.hostname)
 			hosts = append(hosts, *host)
 		}
 	}

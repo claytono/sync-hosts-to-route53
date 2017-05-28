@@ -93,7 +93,11 @@ func convertR53RecordsToHosts(rawHosts []*route53.ResourceRecordSet) hostList {
 				*rh.ResourceRecords[0].Value, *rh.Name)
 			continue
 		}
-		host := hostEntry{hostname: *rh.Name, ip: ip}
+		host := hostEntry{
+			hostname: canonifyHostname(*rh.Name),
+			ip:       ip,
+		}
+
 		hosts = append(hosts, host)
 	}
 

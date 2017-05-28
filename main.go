@@ -32,6 +32,16 @@ func parseOpts() {
 	}
 }
 
+func canonifyHostname(hostname string) string {
+	hostname = strings.ToLower(hostname)
+	// Accept trailing dot, but ignore it for consistency sake
+	if strings.HasSuffix(hostname, ".") {
+		hostname = hostname[:len(hostname)-1]
+	}
+
+	return hostname
+}
+
 // compareHosts takes the contents of the local /etc/hosts file and the
 // route53 hosts that should be compared and produces two arrays.  The first
 // array is a list of Route53 records that need to be updated, and the second
