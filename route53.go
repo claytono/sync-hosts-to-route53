@@ -128,7 +128,7 @@ func (r53 route53Client) sync(domain string, ttl int64, wait bool, toUpdate []ho
 	}
 
 	if wait {
-		log.Info("Waiting for Route53 update to complete")
+		log.Info("Waiting for Route 53 update to complete")
 		gci := route53.GetChangeInput{
 			Id: resp.ChangeInfo.Id,
 		}

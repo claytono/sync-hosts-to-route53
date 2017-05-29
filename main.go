@@ -14,9 +14,9 @@ var opts struct {
 	File           string    `short:"f" long:"file" description:"Input file in /etc/hosts format" default:"/etc/hosts" value-name:"HOSTFILE"`
 	Networks       []CIDRNet `long:"network" description:"Filter by CIDR network" value-name:"x.x.x.x/len"`
 	Domain         string    `short:"d" long:"domain" description:"Domain to update records in" required:"true"`
-	TTL            int64     `long:"ttl" description:"TTL to use for Route53 records" default:"3600"`
+	TTL            int64     `long:"ttl" description:"TTL to use for Route 53 records" default:"3600"`
 	NoQualifyHosts bool      `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
-	NoWait         bool      `long:"no-wait" description:"Don't wait for Route53 to finish update"`
+	NoWait         bool      `long:"no-wait" description:"Don't wait for Route 53 to finish update"`
 }
 
 func parseOpts() {
@@ -47,9 +47,9 @@ func canonifyHostname(hostname string) string {
 }
 
 // compareHosts takes the contents of the local /etc/hosts file and the
-// route53 hosts that should be compared and produces two arrays.  The first
-// array is a list of Route53 records that need to be updated, and the second
-// array is a list of Route53 records that should be deleted.
+// Route 53 hosts that should be compared and produces two arrays.  The first
+// array is a list of Route 53 records that need to be updated, and the second
+// array is a list of Route 53 records that should be deleted.
 func compareHosts(hosts hostList, r53hosts hostList) (hostList, hostList) {
 	// Build index on name, we'll delete entries out of here a we match them
 	// against /etc/hosts entries.  The remaining entries aren't present
