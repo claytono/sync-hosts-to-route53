@@ -98,3 +98,15 @@ func filterHosts(hosts hostList, networks []CIDRNet) hostList {
 	}
 	return output
 }
+
+func qualifyHosts(hosts hostList, domain string) hostList {
+	result := make(hostList, len(hosts))
+	for i, h := range hosts {
+		result[i] = h
+		if !strings.HasSuffix(h.hostname, domain) {
+			result[i].hostname = h.hostname + "." + domain
+		}
+	}
+
+	return result
+}

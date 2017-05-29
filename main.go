@@ -11,10 +11,11 @@ import (
 )
 
 var opts struct {
-	File     string    `short:"f" long:"file" description:"Input file in /etc/hosts format" default:"/etc/hosts" value-name:"HOSTFILE"`
-	Networks []CIDRNet `long:"network" description:"Filter by CIDR network" value-name:"x.x.x.x/len"`
-	Domain   string    `short:"d" long:"domain" description:"Domain to update records in" required:"true"`
-	TTL      int64     `long:"ttl" description:"TTL to use for Route53 records" default:"3600"`
+	File           string    `short:"f" long:"file" description:"Input file in /etc/hosts format" default:"/etc/hosts" value-name:"HOSTFILE"`
+	Networks       []CIDRNet `long:"network" description:"Filter by CIDR network" value-name:"x.x.x.x/len"`
+	Domain         string    `short:"d" long:"domain" description:"Domain to update records in" required:"true"`
+	TTL            int64     `long:"ttl" description:"TTL to use for Route53 records" default:"3600"`
+	NoQualifyHosts bool      `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
 }
 
 func parseOpts() {
@@ -106,6 +107,9 @@ func main() {
 	parseOpts()
 	hosts := readHosts(opts.File)
 	hosts = filterHosts(hosts, opts.Networks)
+	if !opts.NoQualifyHosts {
+		hosts = qualifyHosts(hosts, opts.Domain)
+	}
 	hosts = removeDupes(hosts)
 
 	r53 := newRoute53()
