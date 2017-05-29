@@ -1,13 +1,13 @@
 package main
 
 import (
-	"log"
 	"os"
 	"sort"
 	"strings"
 
 	flags "github.com/jessevdk/go-flags"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 )
 
 var opts struct {
@@ -91,7 +91,7 @@ func removeDupes(hosts hostList) hostList {
 	result := make(hostList, 0, len(hosts))
 	for _, h := range hosts {
 		if _, ok := found[h.hostname]; ok {
-			log.Printf("Duplicate hostname found in /etc/hosts, ignoring (%v/%v)",
+			log.Warnf("Duplicate hostname found in /etc/hosts, ignoring (%v/%v)",
 				h.hostname, h.ip.String())
 			dupCount++
 		} else {
@@ -115,16 +115,16 @@ func main() {
 	r53 := newRoute53()
 	r53Hosts, err := r53.getHosts(opts.Domain)
 	if err != nil {
-		log.Fatalln(errors.Wrap(err, "error when retrieving zones"))
+		log.Fatal(errors.Wrap(err, "error when retrieving zones"))
 	}
 	r53Hosts = filterHosts(r53Hosts, opts.Networks)
 
 	toUpdate, toDelete := compareHosts(hosts, r53Hosts)
 	if len(toUpdate) > 0 || len(toDelete) > 0 {
-		if err := r53.sync(opts.Domain, opts.TTL, toUpdate, toDelete); err != nil {
-			log.Fatalln(errors.Wrap(err, "Could not sync records to Route 53"))
+		if err := r53.sync(opts.Domain, opts.TTL, !opts.NoWait, toUpdate, toDelete); err != nil {
+			log.Fatal(errors.Wrap(err, "Could not sync records to Route 53"))
 		}
 	} else {
-		log.Println("No changes needed.  Everything in sync.")
+		log.Info("No changes needed.  Everything in sync.")
 	}
 }

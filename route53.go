@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 )
 
 type route53Client struct {
@@ -119,7 +119,7 @@ func (r53 route53Client) sync(domain string, ttl int64, toUpdate []hostEntry, to
 		},
 	}
 
-	fmt.Printf("Adding/updating %v records, deleting %v out of date records\n",
+	log.Infof("Adding/updating %v records, deleting %v out of date records",
 		len(toUpdate), len(toDelete))
 
 	_, err = r53.svc.ChangeResourceRecordSets(&input)
@@ -138,13 +138,13 @@ func convertR53RecordsToHosts(rawHosts []*route53.ResourceRecordSet) hostList {
 		}
 
 		if len(rh.ResourceRecords) > 1 {
-			log.Printf("WARN %v has too many resource records (%d), ignoring record",
+			log.Warnf("%v has too many resource records (%d), ignoring record",
 				*rh.Name, len(rh.ResourceRecords))
 			continue
 		}
 		ip := net.ParseIP(*rh.ResourceRecords[0].Value)
 		if ip == nil {
-			log.Printf("WARN cannot parse IP %v for %v, ignoring record",
+			log.Warnf("cannot parse IP %v for %v, ignoring record",
 				*rh.ResourceRecords[0].Value, *rh.Name)
 			continue
 		}

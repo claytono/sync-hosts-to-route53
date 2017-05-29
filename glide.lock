@@ -1,8 +1,8 @@
-hash: 30f7c81071c3a4582aee6019e538f50d6af4d7ed776b673cf526f4c99b198cb0
-updated: 2017-05-24T10:57:18.812488306-04:00
+hash: 657db5a7a16d9199deeae1933b9c7541653687dd25c66aaa4daaf18ce6c7b1d3
+updated: 2017-05-29T08:03:11.956157897-04:00
 imports:
 - name: github.com/aws/aws-sdk-go
-  version: 73b6153078ca6e3fac11a9b86c819e0f82c42aa2
+  version: e0cdae7a65ba3a5e66a0af747a7b3967ddac099c
   subpackages:
   - aws
   - aws/awserr
@@ -36,6 +36,8 @@ imports:
   version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
+- name: github.com/sirupsen/logrus
+  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 testImports:
 - name: github.com/davecgh/go-spew
   version: 04cdfd42973bb9c8589fd6a731800cf222fde1a9
@@ -46,6 +48,6 @@ testImports:
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
-  version: 4d4bfba8f1d1027c4fdbe371823030df51419987
+  version: c7668ea997d68b07ceaa34c46cef1419c39a2374
   subpackages:
   - assert

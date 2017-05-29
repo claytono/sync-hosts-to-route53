@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"log"
 	"net"
 	"os"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type hostEntry struct {
@@ -70,7 +71,7 @@ func readHosts(filename string) (hosts hostList) {
 		i++
 		host, err := parseLine(scanner.Text())
 		if err != nil {
-			log.Printf("WARN %v on line %v, skipping\n", err, i)
+			log.Warnf("%v on line %v, skipping\n", err, i)
 			continue
 		}
 		if host != nil {
