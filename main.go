@@ -16,6 +16,7 @@ var opts struct {
 	Domain         string    `short:"d" long:"domain" description:"Domain to update records in" required:"true"`
 	TTL            int64     `long:"ttl" description:"TTL to use for Route53 records" default:"3600"`
 	NoQualifyHosts bool      `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
+	NoWait         bool      `long:"no-wait" description:"Don't wait for Route53 to finish update"`
 }
 
 func parseOpts() {

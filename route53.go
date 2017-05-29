@@ -75,7 +75,7 @@ func (r53 route53Client) getHosts(domain string) (hostList, error) {
 	return convertR53RecordsToHosts(rawHosts), nil
 }
 
-func (r53 route53Client) sync(domain string, ttl int64, toUpdate []hostEntry, toDelete []hostEntry) error {
+func (r53 route53Client) sync(domain string, ttl int64, wait bool, toUpdate []hostEntry, toDelete []hostEntry) error {
 	zone, err := r53.getZone(domain)
 	if err != nil {
 		return errors.Wrap(err, "Cannot get zone")
@@ -122,9 +122,23 @@ func (r53 route53Client) sync(domain string, ttl int64, toUpdate []hostEntry, to
 	log.Infof("Adding/updating %v records, deleting %v out of date records",
 		len(toUpdate), len(toDelete))
 
-	_, err = r53.svc.ChangeResourceRecordSets(&input)
+	resp, err := r53.svc.ChangeResourceRecordSets(&input)
 	if err != nil {
 		return errors.Wrapf(err, "Could not update Route 53 records")
+	}
+
+	if wait {
+		log.Info("Waiting for Route53 update to complete")
+		gci := route53.GetChangeInput{
+			Id: resp.ChangeInfo.Id,
+		}
+		err = r53.svc.WaitUntilResourceRecordSetsChanged(&gci)
+		if err != nil {
+			return errors.Wrapf(err, "Update failed during wait")
+		}
+		log.Info("Sync completed successfully")
+	} else {
+		log.Info("Sync queued for update")
 	}
 
 	return nil
