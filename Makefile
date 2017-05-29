@@ -1,8 +1,10 @@
 all: build test lint
 
+FILES=cidrnet.go host.go main.go route53.go
+
 build: sync-hosts-to-route53
 
-sync-hosts-to-route53: cidrnet.go host.go main.go route53.go
+sync-hosts-to-route53: $(FILES)
 	go build -v
 
 test:
@@ -18,4 +20,7 @@ coverage-html:
 clean:
 	go clean
 
-.PHONY: all clean test build lint
+fmt:
+	gofmt -w -s $(FILES)
+
+.PHONY: all clean test build lint fmt
