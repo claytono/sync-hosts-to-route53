@@ -1,8 +1,8 @@
-hash: 657db5a7a16d9199deeae1933b9c7541653687dd25c66aaa4daaf18ce6c7b1d3
-updated: 2017-05-29T08:03:11.956157897-04:00
+hash: a42f3c7c3c4fe4087314af94e18c82493e9875f23f0d55a1576ec84c7002019f
+updated: 2017-05-31T19:41:25.431951216-04:00
 imports:
 - name: github.com/aws/aws-sdk-go
-  version: e0cdae7a65ba3a5e66a0af747a7b3967ddac099c
+  version: d43439f542aac478e400c879d32e567a406d172b
   subpackages:
   - aws
   - aws/awserr
@@ -36,8 +36,15 @@ imports:
   version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
+- name: github.com/rjeczalik/notify
+  version: ef7cb187ad000bc4b503ff24c333786cab812095
+  repo: https://github.com/claytononeill/notify.git
 - name: github.com/sirupsen/logrus
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+- name: golang.org/x/sys
+  version: b90f89a1e7a9c1f6b918820b3daa7f08488c8594
+  subpackages:
+  - unix
 testImports:
 - name: github.com/davecgh/go-spew
   version: 04cdfd42973bb9c8589fd6a731800cf222fde1a9
@@ -48,6 +55,6 @@ testImports:
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
-  version: c7668ea997d68b07ceaa34c46cef1419c39a2374
+  version: e964b172ca7f4c322ee4c39ea605ff53fab44f79
   subpackages:
   - assert

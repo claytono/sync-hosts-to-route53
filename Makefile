@@ -1,6 +1,6 @@
 all: build test lint
 
-FILES=cidrnet.go host.go main.go route53.go
+FILES=cidrnet.go daemon.go host.go main.go route53.go
 
 build: sync-hosts-to-route53
 

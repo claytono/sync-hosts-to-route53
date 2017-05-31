@@ -4,6 +4,7 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"time"
 
 	flags "github.com/jessevdk/go-flags"
 	"github.com/pkg/errors"
@@ -11,12 +12,14 @@ import (
 )
 
 var opts struct {
-	File           string    `short:"f" long:"file" description:"Input file in /etc/hosts format" default:"/etc/hosts" value-name:"HOSTFILE"`
-	Networks       []CIDRNet `long:"network" description:"Filter by CIDR network" value-name:"x.x.x.x/len"`
-	Domain         string    `short:"d" long:"domain" description:"Domain to update records in" required:"true"`
-	TTL            int64     `long:"ttl" description:"TTL to use for Route 53 records" default:"3600"`
-	NoQualifyHosts bool      `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
-	NoWait         bool      `long:"no-wait" description:"Don't wait for Route 53 to finish update"`
+	Mode           string        `short:"m" long:"mode" description:"Operating mode" default:"daemon" choice:"daemon" choice:"oneshot"`
+	File           string        `short:"f" long:"file" description:"Input file in /etc/hosts format" default:"/etc/hosts" value-name:"HOSTFILE"`
+	Networks       []CIDRNet     `long:"network" description:"Filter by CIDR network" value-name:"x.x.x.x/len"`
+	Domain         string        `short:"d" long:"domain" description:"Domain to update records in" required:"true"`
+	Interval       time.Duration `short:"i" long:"interval" description:"Seconds between scheduled resync times." default:"15m"`
+	TTL            int64         `long:"ttl" description:"TTL to use for Route 53 records" default:"3600"`
+	NoQualifyHosts bool          `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
+	NoWait         bool          `long:"no-wait" description:"Don't wait for Route 53 to finish update"`
 }
 
 func parseOpts() {
@@ -104,8 +107,7 @@ func removeDupes(hosts hostList) hostList {
 	return result
 }
 
-func main() {
-	parseOpts()
+func runOnce() {
 	hosts := readHosts(opts.File)
 	hosts = filterHosts(hosts, opts.Networks)
 	if !opts.NoQualifyHosts {
@@ -127,5 +129,15 @@ func main() {
 		}
 	} else {
 		log.Info("No changes needed.  Everything in sync.")
+	}
+
+}
+
+func main() {
+	parseOpts()
+	if opts.Mode == "oneshot" {
+		runOnce()
+	} else {
+		daemon(opts.Interval, opts.File)
 	}
 }
