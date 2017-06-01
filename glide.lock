@@ -1,5 +1,5 @@
-hash: a42f3c7c3c4fe4087314af94e18c82493e9875f23f0d55a1576ec84c7002019f
-updated: 2017-05-31T19:41:25.431951216-04:00
+hash: e6b31caaa7a91ffa518d931132fa6b0977cb5ed36be3b29ef1c5049b5a43a528
+updated: 2017-06-01T13:25:51.908972096-04:00
 imports:
 - name: github.com/aws/aws-sdk-go
   version: d43439f542aac478e400c879d32e567a406d172b
@@ -37,8 +37,7 @@ imports:
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/rjeczalik/notify
-  version: ef7cb187ad000bc4b503ff24c333786cab812095
-  repo: https://github.com/claytononeill/notify.git
+  version: 88a54d914928e1faebb1c2195605dc87bd98dc27
 - name: github.com/sirupsen/logrus
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 - name: golang.org/x/sys

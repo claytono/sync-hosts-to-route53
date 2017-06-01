@@ -9,5 +9,3 @@ import:
 - package: github.com/sirupsen/logrus
   version: ~0.11.5
 - package: github.com/rjeczalik/notify
-  repo: https://github.com/claytononeill/notify.git
-  version: inotifyinit1
