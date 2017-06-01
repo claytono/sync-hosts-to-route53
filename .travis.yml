@@ -1,20 +1,25 @@
 ---
 language: go
 
+go:
+  - 1.x
+  - 1.8.x
+  - master
+
 sudo: false
 
-env:
-  - STAGE=test
-  - STAGE=build
-  - STAGE=lint
-
 install:
-  - wget "https://github.com/Masterminds/glide/releases/download/v0.12.3/glide-v0.12.3-linux-amd64.tar.gz"
-  - mkdir -p $HOME/bin
-  - tar -vxz -C $HOME/bin --strip=1 -f glide-v0.12.3-linux-amd64.tar.gz
-  - export PATH="$HOME/bin:$PATH"
-  - glide install
-  - go get -u github.com/golang/lint/golint
+ - wget "https://github.com/Masterminds/glide/releases/download/v0.12.3/glide-v0.12.3-linux-amd64.tar.gz"
+ - mkdir -p $HOME/bin
+ - tar -vxz -C $HOME/bin --strip=1 -f glide-v0.12.3-linux-amd64.tar.gz
+ - export PATH="$HOME/bin:$PATH"
+ - glide install
+ - go get -u github.com/golang/lint/golint
 
 script:
-  - make ${STAGE}
+ - make test
+ - make lint
+ - make build-all-arch
+ - file sync-hosts-to-route53-*
+ - gzip -9v sync-hosts-to-route53-*
+ - ls -l

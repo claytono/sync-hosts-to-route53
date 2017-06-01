@@ -1,11 +1,37 @@
 all: build test lint
 
 FILES=cidrnet.go daemon.go host.go main.go route53.go
+BINS=sync-hosts-to-route53-linux-mips64 \
+	sync-hosts-to-route53-linux-mips \
+	sync-hosts-to-route53-linux-arm \
+	sync-hosts-to-route53-linux-arm64 \
+	sync-hosts-to-route53-linux-386 \
+	sync-hosts-to-route53-linux-amd64 \
 
 build: sync-hosts-to-route53
 
+build-all-arch: $(BINS)
+
 sync-hosts-to-route53: $(FILES)
 	go build -v
+
+sync-hosts-to-route53-linux-mips64: $(FILES)
+	GOOS=linux GOARCH=mips64 go build -v -o $@
+
+sync-hosts-to-route53-linux-mips: $(FILES)
+	GOOS=linux GOARCH=mips go build -v -o $@
+
+sync-hosts-to-route53-linux-arm: $(FILES)
+	GOOS=linux GOARCH=arm go build -v -o $@
+
+sync-hosts-to-route53-linux-arm64: $(FILES)
+	GOOS=linux GOARCH=arm64 go build -v -o $@
+
+sync-hosts-to-route53-linux-386: $(FILES)
+	GOOS=linux GOARCH=386 go build -v -o $@
+
+sync-hosts-to-route53-linux-amd64: $(FILES)
+	GOOS=linux GOARCH=amd64 go build -v -o $@
 
 test:
 	go test -v $(glide novendor)
@@ -19,6 +45,7 @@ coverage-html:
 
 clean:
 	go clean
+	rm -f ${BINS}
 
 fmt:
 	gofmt -w -s $(FILES)
