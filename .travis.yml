@@ -1,10 +1,14 @@
 ---
 language: go
 
-go:
-  - 1.x
-  - 1.8.x
-  - master
+matrix:
+  include:
+    - go: 1.x
+      env: RELEASE=false
+    - go: 1.8.x
+      env: RELEASE=true
+    - go: master
+      env: RELEASE=false
 
 sudo: false
 
@@ -17,9 +21,22 @@ install:
  - go get -u github.com/golang/lint/golint
 
 script:
+ - env |sort
  - make test
  - make lint
  - make build-all-arch
  - file sync-hosts-to-route53-*
  - gzip -9v sync-hosts-to-route53-*
  - ls -l
+
+deploy:
+  provider: releases
+  api_key:
+    secure: kV9qAmhjkzccBwW4MsZD0D1m6yVXMt4Hww9zoywALXgOxNg2vQE7+zpnoyCBMd07FD++sVMP07/2FnOCzIMYPYndmyLm0Q7k/J961ZOBUQjtZLDnzVJ2bwD2rRUYnylgqc+LeVTtQxAX2T5Ha1AYmoIafm3pulMabHhj/pmTuVtF9T0hmHFu+HrnMspoz9J7Oto4Imyp8kvZ38oKEQOb4Cf25+YIF6fDYktbSmRlRzSJbndtPPV9Mh4R+uuA9nZ3roxih2TO1PH6VhVG+zFJ4t9NtMphemUVnhJTm2qrDXRZCDzOZDnUQ7Y4QEz2Czzj8szBtxQBbt4qejLGaliw6F88fkMRjqdDBlgBK97ondALHJeW8qmw0H0mKiNqMsmsxERfBw/KiVUISoWWzHWkOXB964R2AAUn27xoTTyFop/lrXFa20ywWLghUkHVvN7Ef0yfK1RlRsx6b0dHMo79pvmIEzUdkygC+P3CTvApoQ2f37hBC8AOfHjm3PftoIUCgni7/WQ4kfLSqKyS3CbhPLLW7f8I51XsOMxQGb1R3jB2rk81GkUkNOBriG7kSSxL+4/3YIIp2j5hLXayVk4B3W+6qy6eskpncZtuPbbQUNM5Yi1Zi7VjEEoBbpB66nu4PIb/eJc90AkjwbYgLLajWl9c/Ys2rV+LHUGRxdnJ32s=
+  file_glob: true
+  file:
+    - "sync-hosts-to-route53-*.gz"
+  on:
+    repo: claytononeill/sync-hosts-to-route53
+    tags: true
+    condition: "$RELEASE = true"
