@@ -7,8 +7,6 @@ import (
 	"net"
 	"os"
 	"strings"
-
-	log "github.com/sirupsen/logrus"
 )
 
 type hostEntry struct {

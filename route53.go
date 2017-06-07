@@ -8,7 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 )
 
 type route53Client struct {

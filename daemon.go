@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/rjeczalik/notify"
-	log "github.com/sirupsen/logrus"
 )
 
 func setupNotify(filename string) (chan notify.EventInfo, string) {

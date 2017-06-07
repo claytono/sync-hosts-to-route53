@@ -1,8 +1,8 @@
-hash: e6b31caaa7a91ffa518d931132fa6b0977cb5ed36be3b29ef1c5049b5a43a528
-updated: 2017-06-01T13:25:51.908972096-04:00
+hash: 207e3c48dc40790ba6be7e3242821950e5628b2f0bddbb15b13f38ffda10892f
+updated: 2017-06-05T17:52:56.560213864-04:00
 imports:
 - name: github.com/aws/aws-sdk-go
-  version: d43439f542aac478e400c879d32e567a406d172b
+  version: be4fa13e47938e4801fada8c8ca3d1867ad3dcb3
   subpackages:
   - aws
   - aws/awserr
@@ -20,6 +20,7 @@ imports:
   - aws/request
   - aws/session
   - aws/signer/v4
+  - internal/shareddefaults
   - private/protocol
   - private/protocol/query
   - private/protocol/query/queryutil
@@ -38,8 +39,13 @@ imports:
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/rjeczalik/notify
   version: 88a54d914928e1faebb1c2195605dc87bd98dc27
+- name: github.com/Sirupsen/logrus
+  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+  repo: https://github.com/sirupsen/logrus
 - name: github.com/sirupsen/logrus
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+  subpackages:
+  - hooks/syslog
 - name: golang.org/x/sys
   version: b90f89a1e7a9c1f6b918820b3daa7f08488c8594
   subpackages:

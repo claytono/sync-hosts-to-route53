@@ -1,15 +1,19 @@
 package main
 
 import (
+	"log/syslog"
 	"os"
 	"sort"
 	"strings"
 	"time"
 
+	"github.com/Sirupsen/logrus"
+	logrus_syslog "github.com/Sirupsen/logrus/hooks/syslog"
 	flags "github.com/jessevdk/go-flags"
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 )
+
+var log = logrus.New()
 
 var opts struct {
 	Mode           string        `short:"m" long:"mode" description:"Operating mode" default:"daemon" choice:"daemon" choice:"oneshot"`
@@ -20,6 +24,7 @@ var opts struct {
 	TTL            int64         `long:"ttl" description:"TTL to use for Route 53 records" default:"3600"`
 	NoQualifyHosts bool          `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
 	NoWait         bool          `long:"no-wait" description:"Don't wait for Route 53 to finish update"`
+	Syslog         bool          `long:"syslog" description:"Send logging to syslog in addition to stdout"`
 }
 
 func parseOpts() {
@@ -37,6 +42,25 @@ func parseOpts() {
 	if strings.HasSuffix(opts.Domain, ".") {
 		opts.Domain = opts.Domain[:len(opts.Domain)-1]
 	}
+}
+
+func configureLogging() {
+	// logrus defaults to stderr, but stdout is more conventional
+	log.Out = os.Stdout
+
+	if opts.Syslog {
+		log.Info("Disabling color for syslog")
+		tf := &logrus.TextFormatter{DisableColors: true}
+		log.Formatter = tf
+
+		hook, err := logrus_syslog.NewSyslogHook("", "", syslog.LOG_USER, "sync-hosts-to-route53")
+		if err == nil {
+			log.Hooks.Add(hook)
+		} else {
+			log.Fatal("Cannot initialize syslog: ", err)
+		}
+	}
+
 }
 
 func canonifyHostname(hostname string) string {
@@ -135,6 +159,7 @@ func runOnce() {
 
 func main() {
 	parseOpts()
+	configureLogging()
 	if opts.Mode == "oneshot" {
 		runOnce()
 	} else {
