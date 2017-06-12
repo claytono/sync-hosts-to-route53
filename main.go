@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"log/syslog"
 	"os"
 	"sort"
@@ -25,6 +26,7 @@ var opts struct {
 	NoQualifyHosts bool          `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
 	NoWait         bool          `long:"no-wait" description:"Don't wait for Route 53 to finish update"`
 	Syslog         bool          `long:"syslog" description:"Send logging to syslog in addition to stdout"`
+	SyslogOnly     bool          `long:"syslog-only" description:"Send logging *only* to syslog"`
 }
 
 func parseOpts() {
@@ -45,10 +47,14 @@ func parseOpts() {
 }
 
 func configureLogging() {
-	// logrus defaults to stderr, but stdout is more conventional
-	log.Out = os.Stdout
+	if opts.SyslogOnly {
+		log.Out = ioutil.Discard
+	} else {
+		// logrus defaults to stderr, but stdout is more conventional
+		log.Out = os.Stdout
+	}
 
-	if opts.Syslog {
+	if opts.Syslog || opts.SyslogOnly {
 		log.Info("Disabling color for syslog")
 		tf := &logrus.TextFormatter{DisableColors: true}
 		log.Formatter = tf
