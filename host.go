@@ -7,6 +7,8 @@ import (
 	"net"
 	"os"
 	"strings"
+
+	"github.com/aws/aws-sdk-go/service/route53"
 )
 
 type hostEntry struct {
@@ -14,6 +16,8 @@ type hostEntry struct {
 	ip       net.IP
 	// Aliases are read from the /etc/hosts file, but not mapped to Route53
 	aliases []string
+	// rrset only exists for imported Route 53 records
+	rrset *route53.ResourceRecordSet
 }
 
 type hostList []hostEntry
@@ -48,7 +52,11 @@ func parseLine(line string) (*hostEntry, error) {
 	}
 
 	if ip := net.ParseIP(parts[0]); ip != nil {
-		return &hostEntry{parts[1], ip, parts[2:]}, nil
+		return &hostEntry{
+			hostname: parts[1],
+			ip:       ip,
+			aliases:  parts[2:],
+		}, nil
 	}
 
 	return nil, fmt.Errorf("%s is not a valid IP", parts[0])

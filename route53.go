@@ -98,15 +98,8 @@ func (r53 route53Client) sync(domain string, ttl int64, wait bool, toUpdate []ho
 
 	for _, h := range toDelete {
 		change := route53.Change{
-			Action: aws.String("DELETE"),
-			ResourceRecordSet: &route53.ResourceRecordSet{
-				Name: &h.hostname,
-				Type: aws.String("A"),
-				TTL:  &ttl,
-				ResourceRecords: []*route53.ResourceRecord{
-					{Value: aws.String(h.ip.String())},
-				},
-			},
+			Action:            aws.String("DELETE"),
+			ResourceRecordSet: h.rrset,
 		}
 		changes = append(changes, &change)
 	}
@@ -166,6 +159,7 @@ func convertR53RecordsToHosts(rawHosts []*route53.ResourceRecordSet) hostList {
 		host := hostEntry{
 			hostname: canonifyHostname(*rh.Name),
 			ip:       ip,
+			rrset:    rh,
 		}
 
 		hosts = append(hosts, host)
