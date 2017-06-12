@@ -57,6 +57,11 @@ func parseOpts() {
 		os.Exit(1)
 	}
 
+	if len(opts.Networks) == 0 {
+		fmt.Fprintln(os.Stderr, "one or more networks must be provided (--network)")
+		os.Exit(1)
+	}
+
 	// Accept trailing dot, but ignore it for consistency sake
 	if strings.HasSuffix(opts.Domain, ".") {
 		opts.Domain = opts.Domain[:len(opts.Domain)-1]
