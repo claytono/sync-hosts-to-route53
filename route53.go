@@ -118,6 +118,8 @@ func (r53 route53Client) sync(domain string, ttl int64, wait bool, toUpdate []ho
 		},
 	}
 
+	log.Debug("Changeset for Route 53:")
+	log.Debug(input)
 	log.Infof("Adding/updating %v records, deleting %v out of date records",
 		len(toUpdate), len(toDelete))
 

@@ -27,6 +27,7 @@ var opts struct {
 	NoWait         bool          `long:"no-wait" description:"Don't wait for Route 53 to finish update"`
 	Syslog         bool          `long:"syslog" description:"Send logging to syslog in addition to stdout"`
 	SyslogOnly     bool          `long:"syslog-only" description:"Send logging *only* to syslog"`
+	Debug          bool          `long:"debug" description:"Enable debug logging"`
 }
 
 func parseOpts() {
@@ -52,6 +53,10 @@ func configureLogging() {
 	} else {
 		// logrus defaults to stderr, but stdout is more conventional
 		log.Out = os.Stdout
+	}
+
+	if opts.Debug {
+		log.Level = logrus.DebugLevel
 	}
 
 	if opts.Syslog || opts.SyslogOnly {
