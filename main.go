@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log/syslog"
 	"os"
@@ -14,13 +15,17 @@ import (
 	"github.com/pkg/errors"
 )
 
+// This will automatically be overridden at build time if the provided
+// Makefile is used.
+var version = "unknown"
+
 var log = logrus.New()
 
 var opts struct {
 	Mode           string        `short:"m" long:"mode" description:"Operating mode" default:"daemon" choice:"daemon" choice:"oneshot"`
 	File           string        `short:"f" long:"file" description:"Input file in /etc/hosts format" default:"/etc/hosts" value-name:"HOSTFILE"`
 	Networks       []CIDRNet     `long:"network" description:"Filter by CIDR network" value-name:"x.x.x.x/len"`
-	Domain         string        `short:"d" long:"domain" description:"Domain to update records in" required:"true"`
+	Domain         string        `short:"d" long:"domain" description:"Domain to update records in"`
 	Interval       time.Duration `short:"i" long:"interval" description:"Seconds between scheduled resync times." default:"15m"`
 	TTL            int64         `long:"ttl" description:"TTL to use for Route 53 records" default:"3600"`
 	NoQualifyHosts bool          `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
@@ -28,6 +33,7 @@ var opts struct {
 	Syslog         bool          `long:"syslog" description:"Send logging to syslog in addition to stdout"`
 	SyslogOnly     bool          `long:"syslog-only" description:"Send logging *only* to syslog"`
 	Debug          bool          `long:"debug" description:"Enable debug logging"`
+	Version        bool          `long:"version" description:"Print version number and exit"`
 }
 
 func parseOpts() {
@@ -39,6 +45,16 @@ func parseOpts() {
 		} else {
 			os.Exit(1)
 		}
+	}
+
+	if opts.Version {
+		fmt.Println("version: ", version)
+		os.Exit(0)
+	}
+
+	if opts.Domain == "" {
+		fmt.Fprintln(os.Stderr, "domain name must be specified (-d or --domain)")
+		os.Exit(1)
 	}
 
 	// Accept trailing dot, but ignore it for consistency sake
