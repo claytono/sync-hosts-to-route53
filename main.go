@@ -31,9 +31,50 @@ var opts struct {
 	NoQualifyHosts bool          `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
 	NoWait         bool          `long:"no-wait" description:"Don't wait for Route 53 to finish update"`
 	Syslog         bool          `long:"syslog" description:"Send logging to syslog in addition to stdout"`
+	SyslogFacility string        `long:"syslog-facility" description:"Syslog facility to log under" default:"user"`
 	SyslogOnly     bool          `long:"syslog-only" description:"Send logging *only* to syslog"`
 	Debug          bool          `long:"debug" description:"Enable debug logging"`
 	Version        bool          `long:"version" description:"Print version number and exit"`
+}
+
+func facilityStringToInt(facility string) syslog.Priority {
+	lookup := map[string]syslog.Priority{
+		"kern":     syslog.LOG_KERN,
+		"user":     syslog.LOG_USER,
+		"mail":     syslog.LOG_MAIL,
+		"daemon":   syslog.LOG_DAEMON,
+		"auth":     syslog.LOG_AUTH,
+		"syslog":   syslog.LOG_SYSLOG,
+		"lpr":      syslog.LOG_LPR,
+		"news":     syslog.LOG_NEWS,
+		"uucp":     syslog.LOG_UUCP,
+		"cron":     syslog.LOG_CRON,
+		"authpriv": syslog.LOG_AUTHPRIV,
+		"ftp":      syslog.LOG_FTP,
+		"local0":   syslog.LOG_LOCAL0,
+		"local1":   syslog.LOG_LOCAL1,
+		"local2":   syslog.LOG_LOCAL2,
+		"local3":   syslog.LOG_LOCAL3,
+		"local4":   syslog.LOG_LOCAL4,
+		"local5":   syslog.LOG_LOCAL5,
+		"local6":   syslog.LOG_LOCAL6,
+		"local7":   syslog.LOG_LOCAL7,
+	}
+
+	p, ok := lookup[facility]
+
+	if !ok {
+		keys := make([]string, len(lookup))
+		for k := range lookup {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+
+		log.Errorf("\"%v\" is not a valid syslog facility", facility)
+		log.Fatalln("Valid facilities are:", strings.Join(keys, " "))
+	}
+
+	return p
 }
 
 func parseOpts() {
@@ -81,11 +122,12 @@ func configureLogging() {
 	}
 
 	if opts.Syslog || opts.SyslogOnly {
+		facility := facilityStringToInt(opts.SyslogFacility)
 		log.Info("Disabling color for syslog")
 		tf := &logrus.TextFormatter{DisableColors: true}
 		log.Formatter = tf
 
-		hook, err := logrus_syslog.NewSyslogHook("", "", syslog.LOG_USER, "sync-hosts-to-route53")
+		hook, err := logrus_syslog.NewSyslogHook("", "", facility, "sync-hosts-to-route53")
 		if err == nil {
 			log.Hooks.Add(hook)
 		} else {
