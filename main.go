@@ -193,7 +193,7 @@ func removeDupes(hosts hostList) hostList {
 	result := make(hostList, 0, len(hosts))
 	for _, h := range hosts {
 		if _, ok := found[h.hostname]; ok {
-			log.Warnf("Duplicate hostname found in /etc/hosts, ignoring (%v/%v)",
+			log.Warnf("Duplicate hostname found in hosts, ignoring (%v/%v)",
 				h.hostname, h.ip.String())
 			dupCount++
 		} else {
