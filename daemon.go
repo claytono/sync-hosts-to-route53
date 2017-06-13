@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/rjeczalik/notify"
 )
 
@@ -56,6 +57,11 @@ func daemon(interval time.Duration, filename string) {
 			if ei.Path() == absfn {
 				log.Info("file change event detected: ", ei)
 				resyncNeeded = true
+			} else if log.Level <= logrus.DebugLevel {
+				// logrus levels are numerically the opposite of what you'd
+				// expect.  This logs if debug logging is enabled, but not
+				// otherwise.
+				log.Debug("file change event detected: ", ei)
 			}
 		}
 
