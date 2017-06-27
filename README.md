@@ -112,6 +112,12 @@ By default the Route53 domain will be appended to the end of any host file
 entries that appear to be lacking it.  To disable this behavior, specify
 `--no-qualifiy-hosts`.
 
+### --exclude-hosts
+
+Exclude specific hosts from being synced to Route53.  This can be used to
+prevent manually created items from being deleted during the sync process.
+This can be specified multiple times.
+
 ### --no-wait
 
 By default the program will wait for Route 53 updates to propagate after

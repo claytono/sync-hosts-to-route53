@@ -29,6 +29,7 @@ var opts struct {
 	Interval       time.Duration `short:"i" long:"interval" description:"Seconds between scheduled resync times." default:"15m"`
 	TTL            int64         `long:"ttl" description:"TTL to use for Route 53 records" default:"3600"`
 	NoQualifyHosts bool          `long:"no-qualify-hosts" description:"Don't force domain to be added to end of hosts"`
+	ExcludeHosts   []string      `long:"exclude-host" description:"Exclude one or more hosts from being synced"`
 	NoWait         bool          `long:"no-wait" description:"Don't wait for Route 53 to finish update"`
 	Syslog         bool          `long:"syslog" description:"Send logging to syslog in addition to stdout"`
 	SyslogFacility string        `long:"syslog-facility" description:"Syslog facility to log under" default:"user"`
@@ -205,6 +206,25 @@ func removeDupes(hosts hostList) hostList {
 	return result
 }
 
+func removeExcludedHosts(hosts hostList, excludeList []string) hostList {
+	hl := make(hostList, 0, len(hosts))
+
+	for _, h := range hosts {
+		excluded := false
+		for _, eh := range excludeList {
+			if h.hostname == eh {
+				excluded = true
+			}
+		}
+
+		if !excluded {
+			hl = append(hl, h)
+		}
+	}
+
+	return hl
+}
+
 func runOnce() {
 	hosts := readHosts(opts.File)
 	hosts = filterHostsByNetwork(hosts, opts.Networks)
@@ -212,6 +232,7 @@ func runOnce() {
 		hosts = qualifyHosts(hosts, opts.Domain)
 	}
 	hosts = removeDupes(hosts)
+	hosts = removeExcludedHosts(hosts, opts.ExcludeHosts)
 
 	r53 := newRoute53()
 	r53Hosts, err := r53.getHosts(opts.Domain)
@@ -219,6 +240,7 @@ func runOnce() {
 		log.Fatal(errors.Wrap(err, "error when retrieving zones"))
 	}
 	r53Hosts = filterHostsByNetwork(r53Hosts, opts.Networks)
+	r53Hosts = removeExcludedHosts(hosts, opts.ExcludeHosts)
 
 	toUpdate, toDelete := compareHosts(hosts, r53Hosts)
 	if len(toUpdate) > 0 || len(toDelete) > 0 {
