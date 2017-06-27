@@ -207,7 +207,7 @@ func removeDupes(hosts hostList) hostList {
 
 func runOnce() {
 	hosts := readHosts(opts.File)
-	hosts = filterHosts(hosts, opts.Networks)
+	hosts = filterHostsByNetwork(hosts, opts.Networks)
 	if !opts.NoQualifyHosts {
 		hosts = qualifyHosts(hosts, opts.Domain)
 	}
@@ -218,7 +218,7 @@ func runOnce() {
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "error when retrieving zones"))
 	}
-	r53Hosts = filterHosts(r53Hosts, opts.Networks)
+	r53Hosts = filterHostsByNetwork(r53Hosts, opts.Networks)
 
 	toUpdate, toDelete := compareHosts(hosts, r53Hosts)
 	if len(toUpdate) > 0 || len(toDelete) > 0 {

@@ -93,7 +93,7 @@ func readHosts(filename string) (hosts hostList) {
 	return
 }
 
-func filterHosts(hosts hostList, networks []CIDRNet) hostList {
+func filterHostsByNetwork(hosts hostList, networks []CIDRNet) hostList {
 	output := hostList{}
 	for _, host := range hosts {
 		for _, net := range networks {
