@@ -225,7 +225,7 @@ func removeExcludedHosts(hosts hostList, excludeList []string) hostList {
 	return hl
 }
 
-func runOnce() {
+func runOnce() error {
 	hosts := readHosts(opts.File)
 	hosts = filterHostsByNetwork(hosts, opts.Networks)
 	if !opts.NoQualifyHosts {
@@ -237,7 +237,8 @@ func runOnce() {
 	r53 := newRoute53()
 	r53Hosts, err := r53.getHosts(opts.Domain)
 	if err != nil {
-		log.Fatal(errors.Wrap(err, "error when retrieving zones"))
+		log.Warn(errors.Wrap(err, "error when retrieving zones"))
+		return err
 	}
 	r53Hosts = filterHostsByNetwork(r53Hosts, opts.Networks)
 	r53Hosts = removeExcludedHosts(r53Hosts, opts.ExcludeHosts)
@@ -245,12 +246,14 @@ func runOnce() {
 	toUpdate, toDelete := compareHosts(hosts, r53Hosts)
 	if len(toUpdate) > 0 || len(toDelete) > 0 {
 		if err := r53.sync(opts.Domain, opts.TTL, !opts.NoWait, toUpdate, toDelete); err != nil {
-			log.Fatal(errors.Wrap(err, "Could not sync records to Route 53"))
+			log.Warn(errors.Wrap(err, "Could not sync records to Route 53"))
+			return err
 		}
 	} else {
 		log.Info("No changes needed.  Everything in sync.")
 	}
 
+	return nil
 }
 
 func main() {

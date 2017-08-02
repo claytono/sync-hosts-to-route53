@@ -33,6 +33,7 @@ func runIfInputExists(filename string) {
 	if _, err := os.Stat(filename); err != nil {
 		log.Error("Cannot stat hosts file, skipping sync: ", err)
 	} else {
+		// Ignore errors here, since we want to keep retrying over and over.
 		runOnce()
 	}
 }
