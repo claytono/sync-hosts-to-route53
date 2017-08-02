@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.2] - 2017-08-02
+### Changed
+- Fixed issue with Route 53 errors causing daemon mode to exit.
+
 ## [1.1.1] - 2017-08-02
 ### Changed
 - Fixed typo which made hosts not get synced.
