@@ -240,7 +240,7 @@ func runOnce() {
 		log.Fatal(errors.Wrap(err, "error when retrieving zones"))
 	}
 	r53Hosts = filterHostsByNetwork(r53Hosts, opts.Networks)
-	r53Hosts = removeExcludedHosts(hosts, opts.ExcludeHosts)
+	r53Hosts = removeExcludedHosts(r53Hosts, opts.ExcludeHosts)
 
 	toUpdate, toDelete := compareHosts(hosts, r53Hosts)
 	if len(toUpdate) > 0 || len(toDelete) > 0 {
