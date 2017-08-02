@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.1] - 2017-08-02
+### Changed
+- Fixed typo which made hosts not get synced.
+
 ## [1.1.0] - 2017-06-27
 ### Added
 - New `--exclude-host` option to prevent deleting or changing Route 53 entries
