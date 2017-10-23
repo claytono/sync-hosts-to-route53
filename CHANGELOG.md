@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.3] - 2017-10-23
+###
+- Rebuild binarys with 1.9.1
+
 ## [1.1.2] - 2017-08-02
 ### Changed
 - Fixed issue with Route 53 errors causing daemon mode to exit.

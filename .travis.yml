@@ -5,7 +5,7 @@ matrix:
   include:
     - go: 1.x
       env: RELEASE=false
-    - go: 1.8.x
+    - go: 1.9.x
       env: RELEASE=true
     - go: master
       env: RELEASE=false
