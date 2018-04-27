@@ -1,6 +1,6 @@
 # Sync /etc/hosts to AWS Route 53
 
-[![Build Status](https://travis-ci.org/claytononeill/sync-hosts-to-route53.svg?branch=master)](https://travis-ci.org/claytononeill/sync-hosts-to-route53) [![Go Report Card](https://goreportcard.com/badge/github.com/claytononeill/sync-hosts-to-route53)](https://goreportcard.com/report/github.com/claytononeill/sync-hosts-to-route53)
+[![Build Status](https://travis-ci.org/claytono/sync-hosts-to-route53.svg?branch=master)](https://travis-ci.org/claytono/sync-hosts-to-route53) [![Go Report Card](https://goreportcard.com/badge/github.com/claytono/sync-hosts-to-route53)](https://goreportcard.com/report/github.com/claytono/sync-hosts-to-route53)
 
 ## What does this do?
 
@@ -34,10 +34,10 @@ this might work well for you.
   dependencies and it makes cross compiles for other architectures easy.
 
 * Binaries can be found on the [GitHub releases
-  page](https://github.com/claytononeill/sync-hosts-to-route53/releases)
+  page](https://github.com/claytono/sync-hosts-to-route53/releases)
 
 * MIPS64 binaries are built and available on the [GitHub releases
-  page](https://github.com/claytononeill/sync-hosts-to-route53/releases), but
+  page](https://github.com/claytono/sync-hosts-to-route53/releases), but
   aren't recommended.  When tested on EdgeOS 1.9.1, inotify does not appear to
   work with the MIPS64 binary, but does work with the MIPS (32 bit) build.  In
   addition, when testing this in QEMU w/MIPS64, the binary just crashes on
