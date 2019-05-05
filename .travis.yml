@@ -37,6 +37,6 @@ deploy:
   file:
     - "sync-hosts-to-route53-*.gz"
   on:
-    repo: claytononeill/sync-hosts-to-route53
+    repo: claytono/sync-hosts-to-route53
     tags: true
     condition: "$RELEASE = true"
