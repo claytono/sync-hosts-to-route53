@@ -36,6 +36,7 @@ deploy:
   file_glob: true
   file:
     - "sync-hosts-to-route53-*.gz"
+  skip_cleanup: true
   on:
     repo: claytono/sync-hosts-to-route53
     tags: true
