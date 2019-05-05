@@ -1,8 +1,8 @@
-hash: 207e3c48dc40790ba6be7e3242821950e5628b2f0bddbb15b13f38ffda10892f
-updated: 2017-06-05T17:52:56.560213864-04:00
+hash: 4cdb1783a6c016a114e380780577c8b157ec421b664d5aef6649b34a25a167ea
+updated: 2019-05-05T09:45:17.068026-04:00
 imports:
 - name: github.com/aws/aws-sdk-go
-  version: be4fa13e47938e4801fada8c8ca3d1867ad3dcb3
+  version: 96358b8282b1a3aa66836d2f2fe66216cc419668
   subpackages:
   - aws
   - aws/awserr
@@ -36,14 +36,12 @@ imports:
 - name: github.com/jmespath/go-jmespath
   version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
 - name: github.com/pkg/errors
-  version: 645ef00459ed84a119197bfb8d8205042c6df63d
+  version: ba968bfe8b2f7e042a574c888954fccecfa385b4
 - name: github.com/rjeczalik/notify
-  version: 88a54d914928e1faebb1c2195605dc87bd98dc27
+  version: 69d839f37b13a8cb7a78366f7633a4071cb43be7
 - name: github.com/Sirupsen/logrus
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
   repo: https://github.com/sirupsen/logrus
-- name: github.com/sirupsen/logrus
-  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
   subpackages:
   - hooks/syslog
 - name: golang.org/x/sys
