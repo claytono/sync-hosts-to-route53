@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.4] - 2019-05-05
+###
+- Rebuild binaries with 1.12.4
+- Updated deps to latest stable
+
 ## [1.1.3] - 2017-10-23
 ###
 - Rebuild binaries with 1.9.1
