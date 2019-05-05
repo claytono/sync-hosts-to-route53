@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased] - yyyy-mm-dd
+###
+- Switch from `glide` to `dep`
+
 ## [1.1.4] - 2019-05-05
 ###
 - Rebuild binaries with 1.12.4
