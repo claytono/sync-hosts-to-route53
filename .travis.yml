@@ -18,7 +18,7 @@ install:
  - tar -vxz -C $HOME/bin --strip=1 -f glide-v0.12.3-linux-amd64.tar.gz
  - export PATH="$HOME/bin:$PATH"
  - glide install
- - go get -u github.com/golang/lint/golint
+ - go get -u golang.org/x/lint/golint
 
 script:
  - env |sort
