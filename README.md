@@ -152,10 +152,7 @@ Print summary of these options
 
 ## Building From Source
 
-Dependencies for this project are managed using
-[Glide](https://github.com/Masterminds/glide).  To build you will want to run
-`glide install` to pull in the dependencies, then run `make build` to build the
-binary with version information.
+Dependencies for this project are managed using [`go mod`](https://github.com/golang/go/wiki/Modules)
 
 To build binaries for all platforms (used for releases), run `make
 build-all-arch`.
@@ -163,4 +160,4 @@ build-all-arch`.
 ## Author
 
 Clayton O'Neill
-<clayton@oneill.net>
+clayton@oneill.net
