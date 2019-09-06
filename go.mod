@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/Sirupsen/logrus v0.11.5
-	github.com/aws/aws-sdk-go v1.21.6
+	github.com/aws/aws-sdk-go v1.23.16
 	github.com/davecgh/go-spew v0.0.0-20161028175848-04cdfd42973b // indirect
 	github.com/go-ini/ini v0.0.0-20170519023713-afbc45e87f3b // indirect
 	github.com/jessevdk/go-flags v1.4.0
