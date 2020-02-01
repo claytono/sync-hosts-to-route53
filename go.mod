@@ -9,7 +9,7 @@ require (
 	github.com/go-ini/ini v0.0.0-20170519023713-afbc45e87f3b // indirect
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/jmespath/go-jmespath v0.0.0-20160803190731-bd40a432e4c7 // indirect
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v0.0.0-20151028094244-d8ed2627bdf0 // indirect
 	github.com/rjeczalik/notify v0.9.2
 	github.com/smartystreets/goconvey v0.0.0-20190710185942-9d28bd7c0945 // indirect
