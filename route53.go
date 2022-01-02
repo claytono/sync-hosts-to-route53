@@ -150,6 +150,10 @@ func convertR53RecordsToHosts(rawHosts []*route53.ResourceRecordSet) hostList {
 				*rh.Name, len(rh.ResourceRecords))
 			continue
 		}
+		if len(rh.ResourceRecords) == 0 {
+			log.Debugf("%v has no resource records, ignoring record", *rh.Name)
+			continue
+		}
 		ip := net.ParseIP(*rh.ResourceRecords[0].Value)
 		if ip == nil {
 			log.Warnf("cannot parse IP %v for %v, ignoring record",
