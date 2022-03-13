@@ -1,7 +1,8 @@
 # Changelog
 
-## [unreleased] - yyyy-mm-dd
+## [1.1.5] - 2022-03-12
 ###
+- Fixed bug with alias A records
 - Switch from `glide` to `dep`
 
 ## [1.1.4] - 2019-05-05
