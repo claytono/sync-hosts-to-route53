@@ -11,5 +11,5 @@ require (
 	github.com/pmezard/go-difflib v0.0.0-20151028094244-d8ed2627bdf0 // indirect
 	github.com/rjeczalik/notify v0.9.2
 	github.com/stretchr/testify v0.0.0-20170530201152-e964b172ca7f
-	golang.org/x/net v0.0.0-20190628185345-da137c7871d7 // indirect
+	golang.org/x/net v0.7.0 // indirect
 )
