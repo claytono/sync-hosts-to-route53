@@ -1,3 +1,5 @@
+#  I've archived this repo since I no longer have a need for this project
+
 # Sync /etc/hosts to AWS Route 53
 
 [![Build Status](https://travis-ci.org/claytono/sync-hosts-to-route53.svg?branch=master)](https://travis-ci.org/claytono/sync-hosts-to-route53) [![Go Report Card](https://goreportcard.com/badge/github.com/claytono/sync-hosts-to-route53)](https://goreportcard.com/report/github.com/claytono/sync-hosts-to-route53)
